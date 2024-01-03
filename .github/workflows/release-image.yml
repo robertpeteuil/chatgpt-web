@@ -1,4 +1,4 @@
-name: release
+name: release-image
 
 on:
   release:
@@ -26,4 +26,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: '${{ vars.IMAGE_NAME }}:${{ github.event.release.tag_name }}'
+          tags: |
+            '${{ vars.IMAGE_NAME }}:latest'
+            '${{ vars.IMAGE_NAME }}:${{ github.event.release.tag_name }}'
