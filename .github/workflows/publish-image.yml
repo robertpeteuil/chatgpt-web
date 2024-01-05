@@ -12,6 +12,9 @@ on:
     types: [released]
   workflow_dispatch:
 
+env:
+  BUILD_CONTEXT: ${{ vars.BUILD_CONTEXT || '.'}}
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -30,7 +33,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ${{ env.BUILD_CONTEXT }}
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
