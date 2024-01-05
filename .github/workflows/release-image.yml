@@ -1,3 +1,10 @@
+# Description: Build and push Docker image to Docker Hub on release
+#
+# required values:
+#   var.IMAGE_NAME             : name of the image to build
+#   secrets.DOCKERHUB_USERNAME : username for Docker Hub
+#   secrets.DOCKERHUB_TOKEN    : token for Docker Hub
+
 name: release-image
 
 on:
