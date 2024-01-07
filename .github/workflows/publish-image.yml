@@ -1,0 +1,41 @@
+# Description: Build and push Docker image to Docker Hub on release
+#
+# required values:
+#   var.IMAGE_NAME             : name of the image to build
+#   secrets.DOCKERHUB_USERNAME : username for Docker Hub
+#   secrets.DOCKERHUB_TOKEN    : token for Docker Hub
+
+name: release-image
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+
+env:
+  BUILD_CONTEXT: ${{ vars.BUILD_CONTEXT || '.'}}
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ env.BUILD_CONTEXT }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ vars.IMAGE_NAME }}:latest
+            ${{ vars.IMAGE_NAME }}:${{ github.event.release.tag_name }}
