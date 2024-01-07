@@ -5,7 +5,7 @@
 #   secrets.DOCKERHUB_USERNAME : username for Docker Hub
 #   secrets.DOCKERHUB_TOKEN    : token for Docker Hub
 
-name: release-image
+name: publish-image
 
 on:
   release:
@@ -16,7 +16,7 @@ env:
   BUILD_CONTEXT: ${{ vars.BUILD_CONTEXT || '.'}}
 
 jobs:
-  docker:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
